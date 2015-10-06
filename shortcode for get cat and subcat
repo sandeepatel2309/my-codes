@@ -1,0 +1,23 @@
+function getallterms($atts){
+	extract(shortcode_atts(array('slug' => ''),$atts));
+ 
+	$cat = get_term_by ( 'slug', $slug, 'as-product-category');
+	$term_id = $cat -> term_id;
+	$termchildren = get_term_children( $term_id, 'as-product-category' );
+	
+	ob_start();	
+	?>
+	<h4 class='widget-title'><?php echo $cat -> name; ?> </h4>
+	<ul>
+		 <?php	foreach ( $termchildren as $child ) { 
+			$term = get_term_by( 'id', $child, 'as-product-category' );?>
+			<li><a href="<?php get_term_link( $child, 'as-product-category' ); ?>"><?php echo $term->name; ?></a></li>
+
+		 <?php } ?>
+	</ul>
+
+	<?php return ob_get_clean();
+} 
+
+
+add_shortcode("allterms","getallterms");
